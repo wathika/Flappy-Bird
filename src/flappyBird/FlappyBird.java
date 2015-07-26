@@ -5,6 +5,8 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.Timer;
@@ -18,12 +20,17 @@ public class FlappyBird implements ActionListener{
 	public Render render;
 	
 	public Rectangle bird;
-		
+
+	public ArrayList<Rectangle> columns;
+	
+	public Random rand;
+	
 	public FlappyBird(){
 		JFrame jframe = new JFrame();
 		Timer timer = new Timer(20, this);
 		
 		render = new Render();
+		rand = new Random();
 		
 		jframe.add(render);
 		jframe.setTitle("Flappy Bird");
@@ -33,9 +40,24 @@ public class FlappyBird implements ActionListener{
 		jframe.setVisible(true);
 		
 		bird = new Rectangle(WIDTH/ 2-10, HEIGHT / 2-10, 20, 20);
+		columns = new ArrayList<Rectangle>();
 		
 		timer.start();
 		
+	}
+	
+	public void addColumn(){
+		int space = 300;
+		int width = 100;
+		int height = 50 + rand.nextInt(300);
+		
+		columns.add(new Rectangle(WIDTH + width + columns.size() * 300, HEIGHT - height - 120, width, height)) ;
+		columns.add(new Rectangle(WIDTH + width + columns.size() - 1 *300, 0, width, HEIGHT - height - space));
+	}
+	
+	public void paintColumn(Graphics g, Rectangle column){
+		g.setColor(Color.green.darker());
+		g.fillRect(column.x, column.y, column.width, column.height);
 	}
 	
 	@Override
@@ -44,6 +66,7 @@ public class FlappyBird implements ActionListener{
 		render.repaint();
 		
 	}
+	
 	
 	public void repaint(Graphics g) {
 		// TODO Auto-generated method stub
